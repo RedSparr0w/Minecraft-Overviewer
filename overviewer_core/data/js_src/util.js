@@ -324,12 +324,12 @@ overviewer.util = {
 
             if (typeof(obj.spawn) == "object") {
                 var latlng = overviewer.util.fromWorldToLatLng(obj.spawn[0], obj.spawn[1], obj.spawn[2], obj);
-                overviewer.collections.centers[obj.world] = [ latlng, 1 ];
+                overviewer.collections.centers[obj.world] = [ latlng, obj.defaultZoom];
             } else if (typeof(obj.center) == "object") {
                 var latlng = overviewer.util.fromWorldToLatLng(obj.center[0], obj.center[1], obj.center[2], obj);
-                overviewer.collections.centers[obj.world] = [ latlng, 1];
+                overviewer.collections.centers[obj.world] = [ latlng, obj.defaultZoom];
             } else {
-                overviewer.collections.centers[obj.world] = [ [0, 0], 1 ];
+                overviewer.collections.centers[obj.world] = [ [0, 0], obj.defaultZoom];
             }
 
         });
@@ -344,10 +344,10 @@ overviewer.util = {
         //myLayer.addTo(overviewer.map);
         if (typeof(tset.spawn) == "object") {
             var latlng = overviewer.util.fromWorldToLatLng(tset.spawn[0], tset.spawn[1], tset.spawn[2], tset);
-            overviewer.map.setView(latlng,1);
+            overviewer.map.setView(latlng, tset.defaultZoom);
         } else if (typeof(tset.center) == "object") {
             var latlng = overviewer.util.fromWorldToLatLng(tset.center[0], tset.center[1], tset.center[2], tset);
-            overviewer.map.setView(latlng,1);
+            overviewer.map.setView(latlng, tset.defaultZoom);
         } else {
             overviewer.map.setView(overviewer.util.fromWorldToLatLng(0, 0, 0, tset), 1);
         }
