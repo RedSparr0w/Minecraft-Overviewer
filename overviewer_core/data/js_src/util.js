@@ -170,7 +170,7 @@ overviewer.util = {
         overviewer.map.on('baselayerchange', function(ev) {
             // before updating the current_layer, remove the marker control, if it exists
             if (overviewer.current_world && overviewer.current_layer[overviewer.current_world]) {
-                let tsc = overviewer.current_layer[overviewer.current_world].tileSetConfig;
+                var tsc = overviewer.current_layer[overviewer.current_world].tileSetConfig;
 
                 if (tsc.markerCtrl)
                     tsc.markerCtrl.remove();
@@ -302,7 +302,7 @@ overviewer.util = {
                             } else {
                                 m_icon = icon;
                             }
-                            let new_marker = new L.marker(latlng, {icon: m_icon, title: db.hovertext});
+                            var new_marker = new L.marker(latlng, {icon: m_icon, title: db.hovertext});
                             new_marker.bindPopup(db.text);
                             marker_group.addLayer(new_marker);
                         }
