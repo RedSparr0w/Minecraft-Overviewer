@@ -195,7 +195,7 @@ def validateStr(s):
 
 def validateDimension(d):
     # returns (original, argument to get_type)
-    
+
     # these are provided as arguments to RegionSet.get_type()
     pretty_names = {
         "nether": "DIM-1",
@@ -203,7 +203,7 @@ def validateDimension(d):
         "end": "DIM1",
         "default": 0,
     }
-    
+
     try:
         return (d, pretty_names[d])
     except KeyError:
@@ -218,20 +218,20 @@ def validateOutputDir(d):
 def validateCrop(value):
     if not isinstance(value, list):
         value = [value]
-        
+
     cropZones = []
     for zone in value:
         if not isinstance(zone, tuple) or len(zone) != 4:
             raise ValidationException("The value for the 'crop' setting must be an array of tuples of length 4")
         a, b, c, d = tuple(int(x) for x in zone)
-    
+
         if a >= c:
             a, c = c, a
         if b >= d:
             b, d = d, b
-        
+
         cropZones.append((a, b, c, d))
-        
+
     return cropZones
 
 def validateObserver(observer):
@@ -243,6 +243,8 @@ def validateObserver(observer):
 def validateDefaultZoom(z):
     if z > 0:
         return int(z)
+    elif z == False:
+        return z
     else:
         raise ValidationException("The default zoom is set below 1")
 
@@ -263,6 +265,12 @@ def validateManualPOIs(d):
         if not 'x' in poi or not 'y' in poi or not 'z' in poi or not 'id' in poi:
             raise ValidationException("Not all POIs have x/y/z coordinates or an id: %r" % poi)
     return d
+
+def validateCenter(s):
+    if s.length == 3:
+        return [int(s[0]), int(s[1]), int(s[2])]
+    else:
+        raise ValidationException("Center point must have x/y/z coordinates")
 
 def make_dictValidator(keyvalidator, valuevalidator):
     """Compose and return a dict validator -- a validator that validates each

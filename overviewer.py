@@ -360,7 +360,7 @@ dir but you forgot to put quotes around the directory, since it contains spaces.
                 logging.warning(checkname + " ignoring render " + repr(name) + " since it's marked as \"don't render\".")
             else:
                 render['renderchecks'] = num
-        
+
     if options.forcerender:
         logging.info("Forcerender mode activated. ALL tiles will be rendered")
         set_renderchecks("forcerender", 2)
@@ -426,7 +426,7 @@ dir but you forgot to put quotes around the directory, since it contains spaces.
     # create our asset manager... ASSMAN
     assetMrg = assetmanager.AssetManager(destdir, config.get('customwebassets', None))
 
-    # If we've been asked to update web assets, do that and then exit 
+    # If we've been asked to update web assets, do that and then exit
     if options.update_web_assets:
         assetMrg.output_noconfig()
         logging.info("Web assets have been updated")
@@ -488,7 +488,7 @@ dir but you forgot to put quotes around the directory, since it contains spaces.
             texcache[texopts_key] = tex
         else:
             tex = texcache[texopts_key]
-    
+
         try:
             logging.debug("Asking for regionset %r" % render['dimension'][1])
             rset = w.get_regionset(render['dimension'][1])
@@ -533,7 +533,7 @@ dir but you forgot to put quotes around the directory, since it contains spaces.
 
         # only pass to the TileSet the options it really cares about
         render['name'] = render_name # perhaps a hack. This is stored here for the asset manager
-        tileSetOpts = util.dict_subset(render, ["name", "imgformat", "renderchecks", "rerenderprob", "bgcolor", "defaultzoom", "imgquality", "optimizeimg", "rendermode", "worldname_orig", "title", "dimension", "changelist", "showspawn", "overlay", "base", "poititle", "maxzoom", "showlocationmarker", "minzoom"])
+        tileSetOpts = util.dict_subset(render, ["name", "imgformat", "renderchecks", "rerenderprob", "bgcolor", "defaultzoom", "imgquality", "optimizeimg", "rendermode", "worldname_orig", "title", "dimension", "changelist", "showspawn", "overlay", "base", "poititle", "maxzoom", "showlocationmarker", "minzoom", "center", "crop"])
         tileSetOpts.update({"spawn": w.find_true_spawn()}) # TODO find a better way to do this
         for rset in rsets:
             tset = tileset.TileSet(w, rset, assetMrg, tex, tileSetOpts, tileset_dir)
@@ -575,8 +575,8 @@ dir but you forgot to put quotes around the directory, since it contains spaces.
     if options.pid:
         os.remove(options.pid)
 
-    logging.info("Your render has been written to '%s', open index.html to view it" % destdir)    
-        
+    logging.info("Your render has been written to '%s', open index.html to view it" % destdir)
+
     return 0
 
 def list_worlds():

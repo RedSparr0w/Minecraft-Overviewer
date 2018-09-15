@@ -185,7 +185,7 @@ class TileSet(object):
 
         options is a dictionary of configuration parameters (strings mapping to
         values) that are interpreted by the rendering engine.
-        
+
         worldobj is the World object that regionsetobj is from.
 
         regionsetobj is the RegionSet object that is used to render the tiles.
@@ -406,7 +406,7 @@ class TileSet(object):
         # skip if we're told to
         if self.options['renderchecks'] == 3:
             return
-        
+
         # REMEMBER THAT ATTRIBUTES ASSIGNED IN THIS METHOD ARE NOT AVAILABLE IN
         # THE do_work() METHOD (because this is only called in the main process
         # not the workers)
@@ -455,7 +455,7 @@ class TileSet(object):
         # skip if asked to
         if self.options['renderchecks'] == 3:
             return
-        
+
         # The following block of code implementes the changelist functionality.
         fd = self.options.get("changelist", None)
         if fd:
@@ -559,15 +559,27 @@ class TileSet(object):
             return "#%02x%02x%02x" % color[0:3]
         isOverlay = self.options.get("overlay") or (not any(isinstance(x, rendermodes.Base) for x in self.options.get("rendermode")))
 
+        cropCenter = False
+        crop = False
+
+        if self.options.get('crop'):
+            crop = self.options.get('crop')[0]
+            cropCenter = [(crop[2] - ((crop[2] - crop[0]) / 2)), 64, crop[3] - ((crop[3] - crop[1]) / 2)]
+
+        center = self.options.get('center') or cropCenter or False
+
         # don't update last render time if we're leaving this alone
         last_rendertime = self.last_rendertime
         if self.options['renderchecks'] != 3:
             last_rendertime = self.max_chunk_mtime        
         
+        maxZoom = self.options.get('maxzoom', self.treedepth) if self.options.get('maxzoom', self.treedepth) >= 0 else self.treedepth+self.options.get('maxzoom')
+
         d = dict(name = self.options.get('title'),
                 zoomLevels = self.treedepth,
-                defaultZoom = self.options.get('defaultzoom'),
-                maxZoom = self.options.get('maxzoom', self.treedepth) if self.options.get('maxzoom', self.treedepth) >= 0 else self.treedepth+self.options.get('maxzoom'),
+                maxZoom = maxZoom,
+                defaultZoom = round(maxZoom / 2),
+                center = center,
                 path = self.options.get('name'),
                 base = self.options.get('base'),
                 bgcolor = bgcolorformat(self.options.get('bgcolor')),
@@ -829,7 +841,7 @@ class TileSet(object):
         #       tile is older, mark it in a RendertileSet object as dirty.
 
 
-        for chunkx, chunkz, chunkmtime in self.regionset.iterate_chunks() if (markall or platform.system() == 'Windows') else self.regionset.iterate_newer_chunks(last_rendertime): 
+        for chunkx, chunkz, chunkmtime in self.regionset.iterate_chunks() if (markall or platform.system() == 'Windows') else self.regionset.iterate_newer_chunks(last_rendertime):
             chunkcount += 1
 
             if chunkmtime > max_chunk_mtime:
@@ -952,7 +964,7 @@ class TileSet(object):
 
         # Create the actual image now
         img = Image.new("RGBA", (384, 384), self.options['bgcolor'])
-		
+
         # we'll use paste (NOT alpha_over) for quadtree generation because
         # this is just straight image stitching, not alpha blending
 
@@ -1100,7 +1112,7 @@ class TileSet(object):
 
             if self.options['optimizeimg']:
                 optimize_image(tmppath, self.imgextension, self.options['optimizeimg'])
-            
+
             os.utime(tmppath, (max_chunk_mtime, max_chunk_mtime))
 
     def _iterate_and_check_tiles(self, path):
@@ -1143,7 +1155,7 @@ class TileSet(object):
                 if e.errno != errno.ENOENT:
                     raise
                 tile_mtime = 0
-            
+
             try:
                 max_chunk_mtime = max(c[5] for c in get_chunks_by_tile(tileobj, self.regionset))
             except ValueError:
