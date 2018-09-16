@@ -522,7 +522,6 @@ class RegionSet(object):
             'minecraft:cobblestone_wall': (139, 0),
             'minecraft:flower_pot': (140, 0),
             'minecraft:carrots': (141, 0),
-            'minecraft:beetroots': (141, 0), #wrong, but close enough
             'minecraft:potatoes': (142, 0),
             'minecraft:skeleton_wall_skull': (144, 0),
             'minecraft:wither_skeleton_wall_skull': (144, 1),
