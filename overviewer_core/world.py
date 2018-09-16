@@ -398,7 +398,7 @@ class RegionSet(object):
             'minecraft:pink_tulip': (38, 7),
             'minecraft:oxeye_daisy': (38, 8),
             'minecraft:dandelion': (38, 9),
-            'minecraft:brown_mushroom': (39, 0),	
+            'minecraft:brown_mushroom': (39, 0),
             'minecraft:red_mushroom': (40, 0),
             'minecraft:gold_block': (41, 0),
             'minecraft:iron_block': (42, 0),
@@ -440,6 +440,8 @@ class RegionSet(object):
             'minecraft:iron_door': (71, 0),
             'minecraft:oak_pressure_plate': (72, 0),
             'minecraft:redstone_ore': (73, 0),
+            'minecraft:lit_redstone_ore': (74, 0),
+            'minecraft:unlit_redstone_torch': (75, 0),
             'minecraft:redstone_torch': (76, 0),
             'minecraft:stone_button': (77, 0),
             'minecraft:snow': (78, 0),
@@ -457,7 +459,8 @@ class RegionSet(object):
             'minecraft:nether_portal': (90, 0),
             'minecraft:jack_o_lantern': (91, 0),
             'minecraft:cake': (92, 0),
-            'minecraft:repeater': (93,0), # temporarily map to inactive repeater
+            'minecraft:repeater': (93,0),
+            'minecraft:powered_repeater': (94, 0),
             'minecraft:oak_trapdoor': (96, 0),
             'minecraft:spruce_trapdoor': (96, 0), #wrong
             'minecraft:birch_trapdoor': (96, 0),
@@ -663,7 +666,7 @@ class RegionSet(object):
             'minecraft:black_glazed_terracotta': (250, 0),
 
             'minecraft:beetroots': (244, 0),
-            
+
             'minecraft:structure_block': (255, 0),
             'minecraft:sign': (323, 0),
             'minecraft:comparator': (149, 0), # temporary map all comparators to inactive
