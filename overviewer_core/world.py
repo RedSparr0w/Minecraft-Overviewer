@@ -362,6 +362,7 @@ class RegionSet(object):
             'minecraft:green_bed': (26, 0),
             'minecraft:red_bed': (26, 0),
             'minecraft:black_bed': (26, 0),
+            'minecraft:powered_rail': (27, 0),
             'minecraft:detector_rail': (28, 0),
             'minecraft:sticky_piston': (29, 0),
             'minecraft:cobweb': (30, 0),
@@ -440,7 +441,7 @@ class RegionSet(object):
             'minecraft:oak_pressure_plate': (72, 0),
             'minecraft:redstone_ore': (73, 0),
             'minecraft:lit_redstone_ore': (74, 0),
-            'minecraft:unlit_redstone_torch': (75, 0),
+            'minecraft:redstone_wall_torch': (75, 0),
             'minecraft:redstone_torch': (76, 0),
             'minecraft:stone_button': (77, 0),
             'minecraft:snow': (78, 0),
@@ -521,6 +522,7 @@ class RegionSet(object):
             'minecraft:cobblestone_wall': (139, 0),
             'minecraft:flower_pot': (140, 0),
             'minecraft:carrots': (141, 0),
+            'minecraft:beetroots': (141, 0), #wrong, but close enough
             'minecraft:potatoes': (142, 0),
             'minecraft:skeleton_wall_skull': (144, 0),
             'minecraft:wither_skeleton_wall_skull': (144, 1),
@@ -669,17 +671,10 @@ class RegionSet(object):
             'minecraft:red_glazed_terracotta': (249, 0),
             'minecraft:black_glazed_terracotta': (250, 0),
 
-            'minecraft:beetroots': (244, 0),
-
             'minecraft:structure_block': (255, 0),
-            'minecraft:sign': (323, 0),
-            'minecraft:prismarine_shard': (409, 0),
-            'minecraft:prismarine_crystals': (410, 0),
-            'minecraft:rabbit_stew': (413, 0),
-            'minecraft:rabbit_foot': (414, 0),
-            'minecraft:rabbit_hide': (415, 0),
+
             'minecraft:armor_stand': (416, 0),
-            'minecraft:mutton': (423, 0),
+
             # The following blocks are underwater and are not yet rendered.
             # To avoid spurious warnings, we'll treat them as air for now.
             'minecraft:brain_coral': (9, 0),
