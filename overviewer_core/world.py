@@ -292,6 +292,7 @@ class RegionSet(object):
         self._blockmap = {
             'minecraft:air': (0, 0),
             'minecraft:cave_air': (0, 0),
+            'minecraft:void_air': (0, 0),
             'minecraft:stone': (1, 0),
             'minecraft:granite': (1, 1),
             'minecraft:polished_granite': (1, 2),
@@ -317,9 +318,7 @@ class RegionSet(object):
             'minecraft:acacia_sapling': (6, 4),
             'minecraft:dark_oak_sapling': (6, 5),
             'minecraft:bedrock': (7, 0),
-            'minecraft:flowing_water': (8, 0),
             'minecraft:water': (9, 0),
-            'minecraft:flowing_lava': (10, 0),
             'minecraft:lava': (11, 0),
             'minecraft:sand': (12, 0),
             'minecraft:red_sand': (12, 1),
@@ -460,7 +459,6 @@ class RegionSet(object):
             'minecraft:jack_o_lantern': (91, 0),
             'minecraft:cake': (92, 0),
             'minecraft:repeater': (93,0),
-            'minecraft:powered_repeater': (94, 0),
             'minecraft:oak_trapdoor': (96, 0),
             'minecraft:spruce_trapdoor': (96, 0), #wrong
             'minecraft:birch_trapdoor': (96, 0),
@@ -478,10 +476,12 @@ class RegionSet(object):
             'minecraft:red_mushroom_block': (100, 0),
             'minecraft:iron_bars': (101, 0),
             'minecraft:glass_pane': (102, 0),
+            'minecraft:attached_pumpkin_stem': (104, 0),
             'minecraft:attached_melon_stem': (104, 0),
-            'minecraft:pumpkin_stem': (104, 0),
+            'minecraft:pumpkin_stem': (105, 0),
             'minecraft:melon_stem': (105, 0),
             'minecraft:vine': (106, 0),
+            'minecraft:oak_fence_gate': (107, 0),
             'minecraft:brick_stairs': (108, 0),
             'minecraft:stone_brick_stairs': (109, 0),
             'minecraft:mycelium': (110, 0),
@@ -522,13 +522,17 @@ class RegionSet(object):
             'minecraft:flower_pot': (140, 0),
             'minecraft:carrots': (141, 0),
             'minecraft:potatoes': (142, 0),
-            'minecraft:skull': (144, 0),
+            'minecraft:skeleton_wall_skull': (144, 0),
+            'minecraft:wither_skeleton_wall_skull': (144, 1),
+            'minecraft:zombie_wall_head': (144, 2),
+            'minecraft:player_wall_head': (144, 3),
+            'minecraft:creeper_wall_head': (144, 4),
+            'minecraft:dragon_wall_head': (144, 5),
             'minecraft:anvil': (145, 0),
             'minecraft:trapped_chest': (146, 0),
             'minecraft:light_weighted_pressure_plate': (147, 0),
             'minecraft:heavy_weighted_pressure_plate': (148, 0),
-            'minecraft:unpowered_comparator': (149, 0),
-            'minecraft:powered_comparator': (150, 0),
+            'minecraft:comparator': (149, 0), # temporary map all comparators to inactive
             'minecraft:daylight_detector': (151, 0),
             'minecraft:redstone_block': (152, 0),
             'minecraft:nether_quartz_ore': (153, 0),
@@ -619,7 +623,7 @@ class RegionSet(object):
             'minecraft:purpur_stairs': (203, 0),
             'minecraft:purpur_double_slab': (204, 0),
             'minecraft:purpur_slab': (205, 0),
-            'minecraft:end_bricks': (206, 0),
+            'minecraft:end_stone_bricks': (206, 0),
             'minecraft:beetroots': (207, 0),
             'minecraft:grass_path': (208, 0),
             'minecraft:end_gateway': (209, 0),
@@ -640,7 +644,7 @@ class RegionSet(object):
             'minecraft:lime_shulker_box': (224, 0),
             'minecraft:pink_shulker_box': (225, 0),
             'minecraft:gray_shulker_box': (226, 0),
-            'minecraft:silver_shulker_box': (227, 0),
+            'minecraft:light_gray_shulker_box': (227, 0),
             'minecraft:cyan_shulker_box': (228, 0),
             'minecraft:purple_shulker_box': (229, 0),
             'minecraft:blue_shulker_box': (230, 0),
@@ -656,7 +660,7 @@ class RegionSet(object):
             'minecraft:lime_glazed_terracotta': (240, 0),
             'minecraft:pink_glazed_terracotta': (241, 0),
             'minecraft:gray_glazed_terracotta': (242, 0),
-            'minecraft:silver_glazed_terracotta': (243, 0),
+            'minecraft:light_gray_glazed_terracotta': (243, 0),
             'minecraft:cyan_glazed_terracotta': (244, 0),
             'minecraft:purple_glazed_terracotta': (245, 0),
             'minecraft:blue_glazed_terracotta': (246, 0),
@@ -669,7 +673,6 @@ class RegionSet(object):
 
             'minecraft:structure_block': (255, 0),
             'minecraft:sign': (323, 0),
-            'minecraft:comparator': (149, 0), # temporary map all comparators to inactive
             'minecraft:prismarine_shard': (409, 0),
             'minecraft:prismarine_crystals': (410, 0),
             'minecraft:rabbit_stew': (413, 0),
@@ -679,32 +682,32 @@ class RegionSet(object):
             'minecraft:mutton': (423, 0),
             # The following blocks are underwater and are not yet rendered.
             # To avoid spurious warnings, we'll treat them as air for now.
-            'minecraft:brain_coral': (0, 0),
-            'minecraft:brain_coral_block': (0, 0),
-            'minecraft:brain_coral_fan': (0, 0),
-            'minecraft:brain_coral_wall_fan': (0, 0),
-            'minecraft:bubble_column': (0, 0),
-            'minecraft:bubble_coral': (0, 0),
-            'minecraft:bubble_coral_block': (0, 0),
-            'minecraft:bubble_coral_fan': (0, 0),
-            'minecraft:bubble_coral_wall_fan': (0, 0),
-            'minecraft:fire_coral': (0, 0),
-            'minecraft:fire_coral_block': (0, 0),
-            'minecraft:fire_coral_fan': (0, 0),
-            'minecraft:fire_coral_wall_fan': (0, 0),
-            'minecraft:horn_coral': (0, 0),
-            'minecraft:horn_coral_block': (0, 0),
-            'minecraft:horn_coral_fan': (0, 0),
-            'minecraft:horn_coral_wall_fan': (0, 0),
-            'minecraft:kelp': (0, 0),
-            'minecraft:kelp_plant': (0, 0),
-            'minecraft:sea_pickle': (0, 0),
-            'minecraft:seagrass': (0, 0),
-            'minecraft:tall_seagrass': (0, 0),
-            'minecraft:tube_coral': (0, 0),
-            'minecraft:tube_coral_block': (0, 0),
-            'minecraft:tube_coral_fan': (0, 0),
-            'minecraft:tube_coral_wall_fan': (0, 0),
+            'minecraft:brain_coral': (9, 0),
+            'minecraft:brain_coral_block': (9, 0),
+            'minecraft:brain_coral_fan': (9, 0),
+            'minecraft:brain_coral_wall_fan': (9, 0),
+            'minecraft:bubble_column': (9, 0),
+            'minecraft:bubble_coral': (9, 0),
+            'minecraft:bubble_coral_block': (9, 0),
+            'minecraft:bubble_coral_fan': (9, 0),
+            'minecraft:bubble_coral_wall_fan': (9, 0),
+            'minecraft:fire_coral': (9, 0),
+            'minecraft:fire_coral_block': (9, 0),
+            'minecraft:fire_coral_fan': (9, 0),
+            'minecraft:fire_coral_wall_fan': (9, 0),
+            'minecraft:horn_coral': (9, 0),
+            'minecraft:horn_coral_block': (9, 0),
+            'minecraft:horn_coral_fan': (9, 0),
+            'minecraft:horn_coral_wall_fan': (9, 0),
+            'minecraft:kelp': (9, 0),
+            'minecraft:kelp_plant': (9, 0),
+            'minecraft:sea_pickle': (9, 0),
+            'minecraft:seagrass': (9, 0),
+            'minecraft:tall_seagrass': (9, 0),
+            'minecraft:tube_coral': (9, 0),
+            'minecraft:tube_coral_block': (9, 0),
+            'minecraft:tube_coral_fan': (9, 0),
+            'minecraft:tube_coral_wall_fan': (9, 0),
         }
 
 
@@ -720,7 +723,7 @@ class RegionSet(object):
             'bubble_column',
         ]
         for t in treat_as_water:
-            self._blockmap['minecraft:%s' % t] = (8, 0)
+            self._blockmap['minecraft:%s' % t] = (9, 0)
 
         colors = [   'white', 'orange', 'magenta', 'light_blue',
                     'yellow',   'lime',    'pink',       'gray',
@@ -731,6 +734,8 @@ class RegionSet(object):
             self._blockmap['minecraft:%s_concrete_powder'    % colors[i]] = (252, i)
             self._blockmap['minecraft:%s_stained_glass'      % colors[i]] = (95, i)
             self._blockmap['minecraft:%s_concrete'           % colors[i]] = (251, i)
+            self._blockmap['minecraft:%s_banner'           % colors[i]] = (176, i)
+            self._blockmap['minecraft:%s_wall_banner'           % colors[i]] = (177, i)
 
 
     # Re-initialize upon unpickling
