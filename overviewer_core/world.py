@@ -440,7 +440,6 @@ class RegionSet(object):
             'minecraft:iron_door': (71, 0),
             'minecraft:oak_pressure_plate': (72, 0),
             'minecraft:redstone_ore': (73, 0),
-            'minecraft:lit_redstone_ore': (74, 0),
             'minecraft:redstone_wall_torch': (75, 0),
             'minecraft:redstone_torch': (76, 0),
             'minecraft:stone_button': (77, 0),
@@ -505,7 +504,6 @@ class RegionSet(object):
             'minecraft:jungle_slab': (126, 3),
             'minecraft:acacia_slab': (126, 4),
             'minecraft:dark_oak_slab': (126, 5),
-            'minecraft:lit_redstone_lamp': (124, 0),
             'minecraft:cocoa': (127, 0),
             'minecraft:sandstone_stairs': (128, 0),
             'minecraft:emerald_ore': (129, 0),
@@ -598,7 +596,6 @@ class RegionSet(object):
             'minecraft:peony': (175, 5),
             'minecraft:standing_banner': (176, 0),
             'minecraft:wall_banner': (177, 0),
-            'minecraft:daylight_detector_inverted': (178, 0),
             'minecraft:red_sandstone': (179, 0),
             'minecraft:red_sandstone_stairs': (180, 0),
             'minecraft:spruce_fence_gate': (183, 0),
@@ -747,6 +744,9 @@ class RegionSet(object):
         if key == 'minecraft:redstone_ore':
             if palette_entry['Properties']['lit']:
                 block += 1
+        elif key == 'minecraft:daylight_detector':
+            if palette_entry['Properties']['inverted']:
+                block = 178
         elif key == 'minecraft:grass_block':
             if palette_entry['Properties']['snowy']:
                 data = 0x10
