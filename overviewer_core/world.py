@@ -616,7 +616,7 @@ class RegionSet(object):
             'minecraft:jungle_door': (195, 0),
             'minecraft:acacia_door': (196, 0),
             'minecraft:dark_oak_door': (197, 0),
-            'minecraft:end_rod': (198, 0),
+            'minecraft:end_rod': (198, 0), #not rendering
             'minecraft:chorus_plant': (199, 0),
             'minecraft:chorus_flower': (200, 0),
             'minecraft:purpur_block': (201, 0),
