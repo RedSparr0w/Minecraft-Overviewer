@@ -741,11 +741,11 @@ class RegionSet(object):
     def _get_block(self, palette_entry):
         key = palette_entry['Name']
         (block, data) = self._blockmap[key]
-        if key == 'minecraft:redstone_ore':
-            if palette_entry['Properties']['lit']:
+        if key in ['minecraft:redstone_ore', 'minecraft:redstone_lamp']:
+            if palette_entry['Properties']['lit'] == 'true':
                 block += 1
         elif key == 'minecraft:daylight_detector':
-            if palette_entry['Properties']['inverted']:
+            if palette_entry['Properties']['inverted'] == 'true':
                 block = 178
         elif key == 'minecraft:grass_block':
             if palette_entry['Properties']['snowy']:
