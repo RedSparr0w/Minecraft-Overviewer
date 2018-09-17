@@ -670,7 +670,7 @@ class RegionSet(object):
             'minecraft:armor_stand': (416, 0),
 
             # The following blocks are underwater and are not yet rendered.
-            # To avoid spurious warnings, we'll treat them as air for now.
+            # To avoid spurious warnings, we'll treat them as water for now.
             'minecraft:brain_coral': (9, 0),
             'minecraft:brain_coral_block': (9, 0),
             'minecraft:brain_coral_fan': (9, 0),
@@ -698,21 +698,6 @@ class RegionSet(object):
             'minecraft:tube_coral_fan': (9, 0),
             'minecraft:tube_coral_wall_fan': (9, 0),
         }
-
-
-        # The following blocks are underwater and are not yet rendered.
-        # To avoid spurious warnings, we'll treat them as water for now.
-        treat_as_water = [
-             'brain_coral',  'brain_coral_block',  'brain_coral_fan',  'brain_coral_wall_fan',
-            'bubble_coral', 'bubble_coral_block', 'bubble_coral_fan', 'bubble_coral_wall_fan',
-              'fire_coral',   'fire_coral_block',   'fire_coral_fan',   'fire_coral_wall_fan',
-              'horn_coral',   'horn_coral_block',   'horn_coral_fan',   'horn_coral_wall_fan',
-              'tube_coral',   'tube_coral_block',   'tube_coral_fan',   'tube_coral_wall_fan',
-            'kelp', 'kelp_plant', 'sea_pickle', 'seagrass', 'tall_seagrass',
-            'bubble_column',
-        ]
-        for t in treat_as_water:
-            self._blockmap['minecraft:%s' % t] = (9, 0)
 
         colors = [   'white', 'orange', 'magenta', 'light_blue',
                     'yellow',   'lime',    'pink',       'gray',
