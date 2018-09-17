@@ -349,7 +349,7 @@ overviewer.util = {
             var latlng = overviewer.util.fromWorldToLatLng(tset.center[0], tset.center[1], tset.center[2], tset);
             overviewer.map.setView(latlng, tset.defaultZoom);
         } else {
-            overviewer.map.setView(overviewer.util.fromWorldToLatLng(0, 0, 0, tset), 1);
+            overviewer.map.setView(overviewer.util.fromWorldToLatLng(0, 0, 0, tset), tset.defaultZoom);
         }
 
         if (!overviewer.util.initHash()) {
