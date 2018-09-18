@@ -530,7 +530,7 @@ class RegionSet(object):
             'minecraft:trapped_chest': (146, 0),
             'minecraft:light_weighted_pressure_plate': (147, 0),
             'minecraft:heavy_weighted_pressure_plate': (148, 0),
-            'minecraft:comparator': (149, 0), # temporary map all comparators to inactive
+            'minecraft:comparator': (149, 0),
             'minecraft:daylight_detector': (151, 0),
             'minecraft:redstone_block': (152, 0),
             'minecraft:nether_quartz_ore': (153, 0),
