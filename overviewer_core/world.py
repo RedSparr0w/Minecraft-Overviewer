@@ -727,6 +727,9 @@ class RegionSet(object):
         if key in ['minecraft:redstone_ore', 'minecraft:redstone_lamp']:
             if palette_entry['Properties']['lit'] == 'true':
                 block += 1
+        elif key in ['minecraft:comparator', 'minecraft:repeater']:
+            if palette_entry['Properties']['powered'] == 'true':
+                block += 1
         elif key == 'minecraft:daylight_detector':
             if palette_entry['Properties']['inverted'] == 'true':
                 block = 178
