@@ -733,6 +733,8 @@ class RegionSet(object):
         elif key == 'minecraft:daylight_detector':
             if palette_entry['Properties']['inverted'] == 'true':
                 block = 178
+        elif key == 'minecraft:redstone_wire':
+            data = palette_entry['Properties']['power']
         elif key == 'minecraft:grass_block':
             if palette_entry['Properties']['snowy']:
                 data = 0x10
