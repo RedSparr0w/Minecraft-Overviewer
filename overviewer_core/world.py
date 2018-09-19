@@ -743,9 +743,6 @@ class RegionSet(object):
                 data |= 0x08
         elif key == 'minecraft_wheat':
             data = int(palette_entry['Properties']['age'])
-        elif key == 'minecraft:wall_torch':
-            facing = palette_entry['Properties']['facing']
-            data = {'south': 1, 'north': 2, 'west': 3, 'east': 4}[facing]
         elif key in ['minecraft:ladder']:
             facing = palette_entry['Properties']['facing']
             data = {'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
@@ -757,7 +754,7 @@ class RegionSet(object):
                 data |= 4
             elif axis == 'z':
                 data |= 8
-        elif key in ['minecraft:redstone_torch','minecraft:redstone_wall_torch']:
+        elif key in ['minecraft:redstone_torch','minecraft:redstone_wall_torch', 'minecraft:wall_torch']:
             if palette_entry['Properties']['lit'] == 'true':
                 block += 1
             facing = palette_entry['Properties'].get('facing', 'up')
