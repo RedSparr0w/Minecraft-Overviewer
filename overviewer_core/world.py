@@ -729,6 +729,11 @@ class RegionSet(object):
         if key in ['minecraft:redstone_ore', 'minecraft:redstone_lamp']:
             if palette_entry['Properties']['lit'] == 'true':
                 block += 1
+        elif key.endswith('rail'):
+            shape = palette_entry['Properties']['shape']
+            data = {'north_south':0, 'east_west': 1, 'ascending_east': 2, 'ascending_west': 3, 'ascending_north': 4, 'ascending_south': 5}[shape]
+            if palette_entry['Properties']['powered'] == 'true':
+                data += 8
         elif key in ['minecraft:comparator', 'minecraft:repeater']:
             if palette_entry['Properties']['powered'] == 'true':
                 block += 1
