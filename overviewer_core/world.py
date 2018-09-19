@@ -743,7 +743,7 @@ class RegionSet(object):
                 data |= 0x08
         elif key == 'minecraft_wheat':
             data = int(palette_entry['Properties']['age'])
-        elif key in ['minecraft:ladder']:
+        elif key in ['minecraft:ladder', 'minecraft:chest']:
             facing = palette_entry['Properties']['facing']
             data = {'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
         elif key == 'minecraft:nether_wart':
