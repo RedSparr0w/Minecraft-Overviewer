@@ -404,7 +404,7 @@ class RegionSet(object):
             'minecraft:iron_block': (42, 0),
             'minecraft:stone_slab': (44, 0),
             'minecraft:sandstone_slab': (44, 1),
-            'minecraft:wood_slab': (44, 2),
+            'minecraft:oak_slab': (44, 2),
             'minecraft:cobblestone_slab': (44, 3),
             'minecraft:brick_slab': (44, 4),
             'minecraft:stone_brick_slab': (44, 5),
