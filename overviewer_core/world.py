@@ -429,7 +429,7 @@ class RegionSet(object):
             'minecraft:furnace': (61, 0),
             'minecraft:standing_sign': (63, 0),
             'minecraft:oak_door': (64, 0),
-            'minecraft:ladder': (65, 3), # todo: incorporate facing
+            'minecraft:ladder': (65, 0), # todo: incorporate facing
             'minecraft:rail': (66, 0),
             'minecraft:stone_stairs': (67, 0),
             'minecraft:cobblestone_stairs': (67, 0),
@@ -746,6 +746,9 @@ class RegionSet(object):
         elif key == 'minecraft:wall_torch':
             facing = palette_entry['Properties']['facing']
             data = {'south': 1, 'north': 2, 'west': 3, 'east': 4}[facing]
+        elif key in ['minecraft:ladder']:
+            facing = palette_entry['Properties']['facing']
+            data = {'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
         elif key == 'minecraft:nether_wart':
             data = int(palette_entry['Properties']['age'])
         elif key.endswith('_log'):
