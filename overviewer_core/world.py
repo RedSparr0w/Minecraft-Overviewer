@@ -520,6 +520,7 @@ class RegionSet(object):
             'minecraft:flower_pot': (140, 0),
             'minecraft:carrots': (141, 0),
             'minecraft:potatoes': (142, 0),
+            'minecraft:oak_button': (143, 0),
             'minecraft:skeleton_wall_skull': (144, 0),
             'minecraft:wither_skeleton_wall_skull': (144, 1),
             'minecraft:zombie_wall_head': (144, 2),
@@ -751,6 +752,9 @@ class RegionSet(object):
         elif key in ['minecraft:ladder', 'minecraft:chest', 'minecraft:ender_chest', 'minecraft:trapped_chest']:
             facing = palette_entry['Properties']['facing']
             data = {'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
+        elif key in ['minecraft:stone_button', 'minecraft:oak_button']:
+            facing = palette_entry['Properties']['facing']
+            data = {'east': 1, 'west': 2, 'south': 3, 'north': 4}[facing]
         elif key == 'minecraft:nether_wart':
             data = int(palette_entry['Properties']['age'])
         elif key.endswith('_log'):
