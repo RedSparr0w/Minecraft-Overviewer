@@ -324,9 +324,9 @@ overviewer.util = {
 
             if (typeof(obj.spawn) == "object") {
                 var latlng = overviewer.util.fromWorldToLatLng(obj.spawn[0], obj.spawn[1], obj.spawn[2], obj);
-                overviewer.collections.centers[obj.world] = [ latlng, 1 ];
+                overviewer.collections.centers[obj.world] = [ latlng, obj.defaultZoom];
             } else {
-                overviewer.collections.centers[obj.world] = [ [0, 0], 1 ];
+                overviewer.collections.centers[obj.world] = [ [0, 0], obj.defaultZoom];
             }
 
         });
