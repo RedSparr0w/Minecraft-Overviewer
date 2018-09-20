@@ -340,6 +340,12 @@ overviewer.util = {
 
         //myLayer.addTo(overviewer.map);
         overviewer.map.setView(overviewer.util.fromWorldToLatLng(tset.spawn[0], tset.spawn[1], tset.spawn[2], tset), 1);
+        if (typeof(tset.spawn) == "object") {
+            var latlng = overviewer.util.fromWorldToLatLng(tset.spawn[0], tset.spawn[1], tset.spawn[2], tset);
+            overviewer.map.setView(latlng, tset.defaultZoom);
+        } else {
+            overviewer.map.setView(overviewer.util.fromWorldToLatLng(0, 0, 0, tset), tset.defaultZoom);
+        }
 
         if (!overviewer.util.initHash()) {
             overviewer.worldCtrl.onChange({target: {value: overviewer.current_world}});
