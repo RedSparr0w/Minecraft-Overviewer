@@ -559,6 +559,8 @@ class TileSet(object):
             return "#%02x%02x%02x" % color[0:3]
         isOverlay = self.options.get("overlay") or (not any(isinstance(x, rendermodes.Base) for x in self.options.get("rendermode")))
 
+        maxZoom = self.options.get('maxzoom', self.treedepth) if self.options.get('maxzoom', self.treedepth) >= 0 else self.treedepth+self.options.get('maxzoom')
+
         # don't update last render time if we're leaving this alone
         last_rendertime = self.last_rendertime
         if self.options['renderchecks'] != 3:
@@ -566,8 +568,8 @@ class TileSet(object):
         
         d = dict(name = self.options.get('title'),
                 zoomLevels = self.treedepth,
-                defaultZoom = self.options.get('defaultzoom'),
-                maxZoom = self.options.get('maxzoom', self.treedepth) if self.options.get('maxzoom', self.treedepth) >= 0 else self.treedepth+self.options.get('maxzoom'),
+                maxZoom = maxZoom,
+                defaultZoom = round(maxZoom / 1.8),
                 path = self.options.get('name'),
                 base = self.options.get('base'),
                 bgcolor = bgcolorformat(self.options.get('bgcolor')),
