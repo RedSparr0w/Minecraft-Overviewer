@@ -195,7 +195,7 @@ def validateStr(s):
 
 def validateDimension(d):
     # returns (original, argument to get_type)
-    
+
     # these are provided as arguments to RegionSet.get_type()
     pretty_names = {
         "nether": "DIM-1",
@@ -203,7 +203,7 @@ def validateDimension(d):
         "end": "DIM1",
         "default": 0,
     }
-    
+
     try:
         return (d, pretty_names[d])
     except KeyError:
@@ -218,20 +218,20 @@ def validateOutputDir(d):
 def validateCrop(value):
     if not isinstance(value, list):
         value = [value]
-        
+
     cropZones = []
     for zone in value:
         if not isinstance(zone, tuple) or len(zone) != 4:
             raise ValidationException("The value for the 'crop' setting must be an array of tuples of length 4")
         a, b, c, d = tuple(int(x) for x in zone)
-    
+
         if a >= c:
             a, c = c, a
         if b >= d:
             b, d = d, b
-        
+
         cropZones.append((a, b, c, d))
-        
+
     return cropZones
 
 def validateObserver(observer):

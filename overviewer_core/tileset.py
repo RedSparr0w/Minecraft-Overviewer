@@ -185,7 +185,7 @@ class TileSet(object):
 
         options is a dictionary of configuration parameters (strings mapping to
         values) that are interpreted by the rendering engine.
-        
+
         worldobj is the World object that regionsetobj is from.
 
         regionsetobj is the RegionSet object that is used to render the tiles.
@@ -406,7 +406,7 @@ class TileSet(object):
         # skip if we're told to
         if self.options['renderchecks'] == 3:
             return
-        
+
         # REMEMBER THAT ATTRIBUTES ASSIGNED IN THIS METHOD ARE NOT AVAILABLE IN
         # THE do_work() METHOD (because this is only called in the main process
         # not the workers)
@@ -455,7 +455,7 @@ class TileSet(object):
         # skip if asked to
         if self.options['renderchecks'] == 3:
             return
-        
+
         # The following block of code implementes the changelist functionality.
         fd = self.options.get("changelist", None)
         if fd:
@@ -952,7 +952,7 @@ class TileSet(object):
 
         # Create the actual image now
         img = Image.new("RGBA", (384, 384), self.options['bgcolor'])
-		
+
         # we'll use paste (NOT alpha_over) for quadtree generation because
         # this is just straight image stitching, not alpha blending
 
@@ -1100,7 +1100,7 @@ class TileSet(object):
 
             if self.options['optimizeimg']:
                 optimize_image(tmppath, self.imgextension, self.options['optimizeimg'])
-            
+
             os.utime(tmppath, (max_chunk_mtime, max_chunk_mtime))
 
     def _iterate_and_check_tiles(self, path):
@@ -1143,7 +1143,7 @@ class TileSet(object):
                 if e.errno != errno.ENOENT:
                     raise
                 tile_mtime = 0
-            
+
             try:
                 max_chunk_mtime = max(c[5] for c in get_chunks_by_tile(tileobj, self.regionset))
             except ValueError:
