@@ -559,6 +559,24 @@ class TileSet(object):
             return "#%02x%02x%02x" % color[0:3]
         isOverlay = self.options.get("overlay") or (not any(isinstance(x, rendermodes.Base) for x in self.options.get("rendermode")))
 
+        if self.options.get('center', False) == False and self.options.get('showspawn', True) == False:
+        	bounds = {'min': {}, 'max': {}}
+
+        	if self.options.get('crop', False):
+        		for zone in self.options.get('crop'):
+        			if zone[0] <= bounds['min'].get('x', zone[0]):
+        				bounds['min']['x'] = zone[0]
+        			if zone[1] <= bounds['min'].get('z', zone[1]):
+        				bounds['min']['z'] = zone[1]
+        			if zone[2] >= bounds['max'].get('x', zone[2]):
+        				bounds['max']['x'] = zone[2]
+        			if zone[3] >= bounds['max'].get('z', zone[3]):
+        				bounds['max']['z'] = zone[3]
+
+        		self.options['center'] = [bounds['max']['x'] - ((bounds['max']['x'] - bounds['min']['x']) / 2), 64, bounds['max']['z'] - ((bounds['max']['z'] - bounds['min']['z']) / 2)]
+        	else:
+        		self.options['center'] = [0, 64, 0]
+
         maxZoom = self.options.get('maxzoom', self.treedepth) if self.options.get('maxzoom', self.treedepth) >= 0 else self.treedepth+self.options.get('maxzoom')
 
         # don't update last render time if we're leaving this alone
@@ -570,6 +588,7 @@ class TileSet(object):
                 zoomLevels = self.treedepth,
                 maxZoom = maxZoom,
                 defaultZoom = round(maxZoom / 1.8),
+                center = self.options.get('center', False),
                 path = self.options.get('name'),
                 base = self.options.get('base'),
                 bgcolor = bgcolorformat(self.options.get('bgcolor')),

@@ -264,6 +264,14 @@ def validateManualPOIs(d):
             raise ValidationException("Not all POIs have x/y/z coordinates or an id: %r" % poi)
     return d
 
+def validateCenter(c):
+    if c.length == 2:
+        return [int(c[0]), 64, int(c[1])]
+    if c.length == 3:
+        return [int(c[0]), int(c[1]), int(c[2])]
+    else:
+        raise ValidationException("Center point must have x/y/z or x/z coordinates")
+
 def make_dictValidator(keyvalidator, valuevalidator):
     """Compose and return a dict validator -- a validator that validates each
     key and value in a dictionary.
