@@ -85,14 +85,14 @@ class World(object):
     and the parsed level.dat data
 
     """
-    
+
     def __init__(self, worlddir):
         self.worlddir = worlddir
 
         # This list, populated below, will hold RegionSet files that are in
         # this world
         self.regionsets = []
-       
+
         # The level.dat file defines a minecraft world, so assert that this
         # object corresponds to a world on disk
         if not os.path.exists(os.path.join(self.worlddir, "level.dat")):
@@ -105,7 +105,7 @@ class World(object):
         # update: 0,50,0 is the default spawn, and may be valid is some cases
         # more info is needed
         data = nbt.load(os.path.join(self.worlddir, "level.dat"))[1]['Data']
-            
+
 
         # Hard-code this to only work with format version 19133, "Anvil"
         if not ('version' in data and data['version'] == 19133):
@@ -139,7 +139,7 @@ class World(object):
                     self.regionsets.insert(0, rset)
                 else:
                     self.regionsets.append(rset)
-        
+
         # TODO move a lot of the following code into the RegionSet
 
 
@@ -149,13 +149,13 @@ class World(object):
         except KeyError:
             # but very old ones might not? so we'll just go with the world dir name if they don't
             self.name = os.path.basename(os.path.realpath(self.worlddir))
-        
+
         try:
             # level.dat also has a RandomSeed attribute
             self.seed = data['RandomSeed']
         except KeyError:
             self.seed = 0 # oh well
-       
+
         # TODO figure out where to handle regionlists
 
     def get_regionsets(self):
@@ -168,21 +168,21 @@ class World(object):
             logging.debug("You asked for %r, and I found the following candids: %r", index, candids)
             if len(candids) > 0:
                 return candids[0]
-            else: 
+            else:
                 return None
 
 
     def get_level_dat_data(self):
         # Return a copy
         return dict(self.data)
-      
+
     def find_true_spawn(self):
         """Returns the spawn point for this world. Since there is one spawn
         point for a world across all dimensions (RegionSets), this method makes
         sense as a member of the World class.
-        
+
         Returns (x, y, z)
-        
+
         """
         # The spawn Y coordinate is almost always the default of 64.  Find the
         # first air block above the stored spawn location for the true spawn
@@ -193,17 +193,17 @@ class World(object):
         disp_spawnX = spawnX = data['SpawnX']
         spawnY = data['SpawnY']
         disp_spawnZ = spawnZ = data['SpawnZ']
-   
-        ## The chunk that holds the spawn location 
+
+        ## The chunk that holds the spawn location
         chunkX = spawnX//16
         chunkZ = spawnZ//16
-        
+
         ## clamp spawnY to a sane value, in-chunk value
         if spawnY < 0:
             spawnY = 0
         if spawnY > 255:
             spawnY = 255
-        
+
         # Open up the chunk that the spawn is in
         regionset = self.get_regionset(None)
         if not regionset:
@@ -212,7 +212,7 @@ class World(object):
             chunk = regionset.get_chunk(chunkX, chunkZ)
         except ChunkDoesntExist:
             return (spawnX, spawnY, spawnZ)
-    
+
         def getBlock(y):
             "This is stupid and slow but I don't care"
             targetSection = spawnY//16
@@ -251,7 +251,7 @@ class RegionSet(object):
         directory.
 
         regiondir is a path to a directory containing region files.
-        
+
         rel is the relative path of this directory, with respect to the
         world directory.
 
@@ -263,7 +263,7 @@ class RegionSet(object):
         self.rel = os.path.normpath(rel)
         logging.debug("regiondir is %r" % self.regiondir)
         logging.debug("rel is %r" % self.rel)
-        
+
         # we want to get rid of /regions, if it exists
         if self.rel.endswith(os.path.normpath("/region")):
             self.type = self.rel[0:-len(os.path.normpath("/region"))]
@@ -275,13 +275,13 @@ class RegionSet(object):
             self.type = "__unknown"
 
         logging.debug("Scanning regions.  Type is %r" % self.type)
-        
+
         # This is populated below. It is a mapping from (x,y) region coords to filename
         self.regionfiles = {}
 
         # This holds a cache of open regionfile objects
         self.regioncache = cache.LRUCache(size=16, destructor=lambda regionobj: regionobj.close())
-        
+
         for x, y, regionfile in self._iterate_regionfiles():
             # regionfile is a pathname
             self.regionfiles[(x,y)] = (regionfile, os.path.getmtime(regionfile))
@@ -292,6 +292,7 @@ class RegionSet(object):
         self._blockmap = {
             'minecraft:air': (0, 0),
             'minecraft:cave_air': (0, 0),
+            'minecraft:void_air': (0, 0),
             'minecraft:stone': (1, 0),
             'minecraft:granite': (1, 1),
             'minecraft:polished_granite': (1, 2),
@@ -361,6 +362,7 @@ class RegionSet(object):
             'minecraft:green_bed': (26, 0),
             'minecraft:red_bed': (26, 0),
             'minecraft:black_bed': (26, 0),
+            'minecraft:powered_rail': (27, 0),
             'minecraft:detector_rail': (28, 0),
             'minecraft:sticky_piston': (29, 0),
             'minecraft:cobweb': (30, 0),
@@ -396,13 +398,13 @@ class RegionSet(object):
             'minecraft:pink_tulip': (38, 7),
             'minecraft:oxeye_daisy': (38, 8),
             'minecraft:dandelion': (38, 9),
-            'minecraft:brown_mushroom': (39, 0),	
+            'minecraft:brown_mushroom': (39, 0),
             'minecraft:red_mushroom': (40, 0),
             'minecraft:gold_block': (41, 0),
             'minecraft:iron_block': (42, 0),
             'minecraft:stone_slab': (44, 0),
             'minecraft:sandstone_slab': (44, 1),
-            'minecraft:wood_slab': (44, 2),
+            'minecraft:oak_slab': (44, 2),
             'minecraft:cobblestone_slab': (44, 3),
             'minecraft:brick_slab': (44, 4),
             'minecraft:stone_brick_slab': (44, 5),
@@ -427,7 +429,7 @@ class RegionSet(object):
             'minecraft:furnace': (61, 0),
             'minecraft:standing_sign': (63, 0),
             'minecraft:oak_door': (64, 0),
-            'minecraft:ladder': (65, 3), # todo: incorporate facing
+            'minecraft:ladder': (65, 0), # todo: incorporate facing
             'minecraft:rail': (66, 0),
             'minecraft:stone_stairs': (67, 0),
             'minecraft:cobblestone_stairs': (67, 0),
@@ -437,7 +439,8 @@ class RegionSet(object):
             'minecraft:iron_door': (71, 0),
             'minecraft:oak_pressure_plate': (72, 0),
             'minecraft:redstone_ore': (73, 0),
-            'minecraft:redstone_torch': (76, 0),
+            'minecraft:redstone_wall_torch': (75, 0),
+            'minecraft:redstone_torch': (75, 5),
             'minecraft:stone_button': (77, 0),
             'minecraft:snow': (78, 0),
             'minecraft:ice': (79, 0),
@@ -454,7 +457,7 @@ class RegionSet(object):
             'minecraft:nether_portal': (90, 0),
             'minecraft:jack_o_lantern': (91, 0),
             'minecraft:cake': (92, 0),
-            'minecraft:repeater': (93,0), # temporarily map to inactive repeater
+            'minecraft:repeater': (93,0),
             'minecraft:oak_trapdoor': (96, 0),
             'minecraft:spruce_trapdoor': (96, 0), #wrong
             'minecraft:birch_trapdoor': (96, 0),
@@ -472,10 +475,12 @@ class RegionSet(object):
             'minecraft:red_mushroom_block': (100, 0),
             'minecraft:iron_bars': (101, 0),
             'minecraft:glass_pane': (102, 0),
+            'minecraft:attached_pumpkin_stem': (104, 0),
             'minecraft:attached_melon_stem': (104, 0),
-            'minecraft:pumpkin_stem': (104, 0),
+            'minecraft:pumpkin_stem': (105, 0),
             'minecraft:melon_stem': (105, 0),
             'minecraft:vine': (106, 0),
+            'minecraft:oak_fence_gate': (107, 0),
             'minecraft:brick_stairs': (108, 0),
             'minecraft:stone_brick_stairs': (109, 0),
             'minecraft:mycelium': (110, 0),
@@ -486,9 +491,11 @@ class RegionSet(object):
             'minecraft:nether_wart': (115, 0),
             'minecraft:enchanting_table': (116, 0),
             'minecraft:brewing_stand': (117, 0),
+            'minecraft:cauldron': (118, 0),
             'minecraft:end_portal': (119, 0),
             'minecraft:end_portal_frame': (120, 0),
             'minecraft:end_stone': (121, 0),
+            'minecraft:dragon_egg': (122, 0),
             'minecraft:redstone_lamp': (123, 0),
             'minecraft:oak_slab': (126, 0),
             'minecraft:spruce_slab': (126, 1),
@@ -513,10 +520,18 @@ class RegionSet(object):
             'minecraft:flower_pot': (140, 0),
             'minecraft:carrots': (141, 0),
             'minecraft:potatoes': (142, 0),
-            'minecraft:anvil': (145, 0),
+            'minecraft:oak_button': (143, 0),
+            'minecraft:skeleton_wall_skull': (144, 0), #not rendering
+            'minecraft:wither_skeleton_wall_skull': (144, 1), #not rendering
+            'minecraft:zombie_wall_head': (144, 2), #not rendering
+            'minecraft:player_wall_head': (144, 3), #not rendering
+            'minecraft:creeper_wall_head': (144, 4), #not rendering
+            'minecraft:dragon_wall_head': (144, 5), #not rendering
+            'minecraft:anvil': (145, 0), #not rendering
             'minecraft:trapped_chest': (146, 0),
             'minecraft:light_weighted_pressure_plate': (147, 0),
             'minecraft:heavy_weighted_pressure_plate': (148, 0),
+            'minecraft:comparator': (149, 0),
             'minecraft:daylight_detector': (151, 0),
             'minecraft:redstone_block': (152, 0),
             'minecraft:nether_quartz_ore': (153, 0),
@@ -579,6 +594,8 @@ class RegionSet(object):
             'minecraft:large_fern': (175, 3),
             'minecraft:rose_bush': (175, 4),
             'minecraft:peony': (175, 5),
+            'minecraft:standing_banner': (176, 0),
+            'minecraft:wall_banner': (177, 0),
             'minecraft:red_sandstone': (179, 0),
             'minecraft:red_sandstone_stairs': (180, 0),
             'minecraft:spruce_fence_gate': (183, 0),
@@ -596,33 +613,41 @@ class RegionSet(object):
             'minecraft:jungle_door': (195, 0),
             'minecraft:acacia_door': (196, 0),
             'minecraft:dark_oak_door': (197, 0),
+            'minecraft:end_rod': (198, 0), #not rendering
             'minecraft:chorus_plant': (199, 0),
             'minecraft:chorus_flower': (200, 0),
             'minecraft:purpur_block': (201, 0),
+            'minecraft:purpur_pillar': (202, 0),
             'minecraft:purpur_stairs': (203, 0),
+            'minecraft:purpur_slab': (205, 0),
+            'minecraft:end_stone_bricks': (206, 0),
+            'minecraft:beetroots': (207, 0),
             'minecraft:grass_path': (208, 0),
-            'minecraft:end_rod': (208, 0),
+            'minecraft:repeating_command_block': (210, 0),
+            'minecraft:chain_command_block': (211, 0),
             'minecraft:frosted_ice': (212, 0),
             'minecraft:magma_block': (213, 0),
             'minecraft:nether_wart_block': (214, 0),
             'minecraft:red_nether_bricks': (215, 0),
             'minecraft:bone_block': (216, 0),
-            'minecraft:white_shulker_box': (218, 0),
-            'minecraft:orange_shulker_box': (218, 1),
-            'minecraft:magenta_shulker_box': (218, 2),
-            'minecraft:light_blue_shulker_box': (218, 3),
-            'minecraft:yellow_shulker_box': (218, 4),
-            'minecraft:lime_shulker_box': (218, 5),
-            'minecraft:pink_shulker_box': (218, 6),
-            'minecraft:gray_shulker_box': (218, 7),
-            'minecraft:light_gray_shulker_box': (218, 8),
-            'minecraft:cyan_shulker_box': (218, 9),
-            'minecraft:purple_shulker_box': (218, 10),
-            'minecraft:blue_shulker_box': (218, 11),
-            'minecraft:brown_shulker_box': (218, 12),
-            'minecraft:green_shulker_box': (218, 13),
-            'minecraft:red_shulker_box': (218, 14),
-            'minecraft:black_shulker_box': (218, 15),
+            'minecraft:observer': (218, 0),
+            'minecraft:white_shulker_box': (219, 0),
+            'minecraft:orange_shulker_box': (220, 0),
+            'minecraft:magenta_shulker_box': (221, 0),
+            'minecraft:light_blue_shulker_box': (222, 0),
+            'minecraft:yellow_shulker_box': (223, 0),
+            'minecraft:lime_shulker_box': (224, 0),
+            'minecraft:pink_shulker_box': (225, 0),
+            'minecraft:gray_shulker_box': (226, 0),
+            'minecraft:light_gray_shulker_box': (227, 0),
+            'minecraft:cyan_shulker_box': (228, 0),
+            'minecraft:shulker_box': (229, 0), #wrong color
+            'minecraft:purple_shulker_box': (229, 0),
+            'minecraft:blue_shulker_box': (230, 0),
+            'minecraft:brown_shulker_box': (231, 0),
+            'minecraft:green_shulker_box': (232, 0),
+            'minecraft:red_shulker_box': (233, 0),
+            'minecraft:black_shulker_box': (234, 0),
             'minecraft:white_glazed_terracotta': (235, 0),
             'minecraft:orange_glazed_terracotta': (236, 0),
             'minecraft:magenta_glazed_terracotta': (237, 0),
@@ -631,7 +656,7 @@ class RegionSet(object):
             'minecraft:lime_glazed_terracotta': (240, 0),
             'minecraft:pink_glazed_terracotta': (241, 0),
             'minecraft:gray_glazed_terracotta': (242, 0),
-            'minecraft:silver_glazed_terracotta': (243, 0),
+            'minecraft:light_gray_glazed_terracotta': (243, 0),
             'minecraft:cyan_glazed_terracotta': (244, 0),
             'minecraft:purple_glazed_terracotta': (245, 0),
             'minecraft:blue_glazed_terracotta': (246, 0),
@@ -640,73 +665,52 @@ class RegionSet(object):
             'minecraft:red_glazed_terracotta': (249, 0),
             'minecraft:black_glazed_terracotta': (250, 0),
 
-            'minecraft:beetroots': (244, 0),
-            
             'minecraft:structure_block': (255, 0),
-            'minecraft:sign': (323, 0),
-            'minecraft:comparator': (149, 0), # temporary map all comparators to inactive
-            'minecraft:prismarine_shard': (409, 0),
-            'minecraft:prismarine_crystals': (410, 0),
-            'minecraft:rabbit_stew': (413, 0),
-            'minecraft:rabbit_foot': (414, 0),
-            'minecraft:rabbit_hide': (415, 0),
-            'minecraft:armor_stand': (416, 0),
-            'minecraft:mutton': (423, 0),
+
+            'minecraft:armor_stand': (416, 0), #not rendering
+
             # The following blocks are underwater and are not yet rendered.
-            # To avoid spurious warnings, we'll treat them as air for now.
-            'minecraft:brain_coral': (0, 0),
-            'minecraft:brain_coral_block': (0, 0),
-            'minecraft:brain_coral_fan': (0, 0),
-            'minecraft:brain_coral_wall_fan': (0, 0),
-            'minecraft:bubble_column': (0, 0),
-            'minecraft:bubble_coral': (0, 0),
-            'minecraft:bubble_coral_block': (0, 0),
-            'minecraft:bubble_coral_fan': (0, 0),
-            'minecraft:bubble_coral_wall_fan': (0, 0),
-            'minecraft:fire_coral': (0, 0),
-            'minecraft:fire_coral_block': (0, 0),
-            'minecraft:fire_coral_fan': (0, 0),
-            'minecraft:fire_coral_wall_fan': (0, 0),
-            'minecraft:horn_coral': (0, 0),
-            'minecraft:horn_coral_block': (0, 0),
-            'minecraft:horn_coral_fan': (0, 0),
-            'minecraft:horn_coral_wall_fan': (0, 0),
-            'minecraft:kelp': (0, 0),
-            'minecraft:kelp_plant': (0, 0),
-            'minecraft:sea_pickle': (0, 0),
-            'minecraft:seagrass': (0, 0),
-            'minecraft:tall_seagrass': (0, 0),
-            'minecraft:tube_coral': (0, 0),
-            'minecraft:tube_coral_block': (0, 0),
-            'minecraft:tube_coral_fan': (0, 0),
-            'minecraft:tube_coral_wall_fan': (0, 0),
+            # To avoid spurious warnings, we'll treat them as water for now.
+            'minecraft:brain_coral': (8, 0),
+            'minecraft:brain_coral_block': (8, 0),
+            'minecraft:brain_coral_fan': (8, 0),
+            'minecraft:brain_coral_wall_fan': (8, 0),
+            'minecraft:bubble_column': (8, 0),
+            'minecraft:bubble_coral': (8, 0),
+            'minecraft:bubble_coral_block': (8, 0),
+            'minecraft:bubble_coral_fan': (8, 0),
+            'minecraft:bubble_coral_wall_fan': (8, 0),
+            'minecraft:fire_coral': (8, 0),
+            'minecraft:fire_coral_block': (8, 0),
+            'minecraft:fire_coral_fan': (8, 0),
+            'minecraft:fire_coral_wall_fan': (8, 0),
+            'minecraft:horn_coral': (8, 0),
+            'minecraft:horn_coral_block': (8, 0),
+            'minecraft:horn_coral_fan': (8, 0),
+            'minecraft:horn_coral_wall_fan': (8, 0),
+            'minecraft:kelp': (8, 0),
+            'minecraft:kelp_plant': (8, 0),
+            'minecraft:sea_pickle': (8, 0),
+            'minecraft:seagrass': (8, 0),
+            'minecraft:tall_seagrass': (8, 0),
+            'minecraft:tube_coral': (8, 0),
+            'minecraft:tube_coral_block': (8, 0),
+            'minecraft:tube_coral_fan': (8, 0),
+            'minecraft:tube_coral_wall_fan': (8, 0),
         }
-
-
-        # The following blocks are underwater and are not yet rendered.
-        # To avoid spurious warnings, we'll treat them as water for now.
-        treat_as_water = [
-             'brain_coral',  'brain_coral_block',  'brain_coral_fan',  'brain_coral_wall_fan',
-            'bubble_coral', 'bubble_coral_block', 'bubble_coral_fan', 'bubble_coral_wall_fan',
-              'fire_coral',   'fire_coral_block',   'fire_coral_fan',   'fire_coral_wall_fan',
-              'horn_coral',   'horn_coral_block',   'horn_coral_fan',   'horn_coral_wall_fan',
-              'tube_coral',   'tube_coral_block',   'tube_coral_fan',   'tube_coral_wall_fan',
-            'kelp', 'kelp_plant', 'sea_pickle', 'seagrass', 'tall_seagrass',
-            'bubble_column',
-        ]
-        for t in treat_as_water:
-            self._blockmap['minecraft:%s' % t] = (8, 0)
 
         colors = [   'white', 'orange', 'magenta', 'light_blue',
                     'yellow',   'lime',    'pink',       'gray',
                 'light_gray',   'cyan',  'purple',       'blue',
                      'brown',  'green',     'red',      'black']
         for i in range(len(colors)):
-            self._blockmap['minecraft:%s_stained_glass_pane' % colors[i]] = (160, i)
-            self._blockmap['minecraft:%s_concrete_powder'    % colors[i]] = (252, i)
             self._blockmap['minecraft:%s_stained_glass'      % colors[i]] = (95, i)
+            self._blockmap['minecraft:%s_stained_glass_pane' % colors[i]] = (160, i)
+            self._blockmap['minecraft:%s_banner'             % colors[i]] = (176, i) #not rendering
+            self._blockmap['minecraft:%s_wall_banner'        % colors[i]] = (177, i) #not rendering
             self._blockmap['minecraft:%s_concrete'           % colors[i]] = (251, i)
-            
+            self._blockmap['minecraft:%s_concrete_powder'    % colors[i]] = (252, i)
+
 
     # Re-initialize upon unpickling
     def __getstate__(self):
@@ -720,9 +724,30 @@ class RegionSet(object):
     def _get_block(self, palette_entry):
         key = palette_entry['Name']
         (block, data) = self._blockmap[key]
-        if key == 'minecraft:redstone_ore':
-            if palette_entry['Properties']['lit']:
+        if key in ['minecraft:redstone_ore', 'minecraft:redstone_lamp']:
+            if palette_entry['Properties']['lit'] == 'true':
                 block += 1
+        elif key.endswith('gate'):
+            facing = palette_entry['Properties']['facing']
+            data = {'south': 0, 'west': 1, 'north': 2, 'east': 3}[facing]
+            if palette_entry['Properties']['open'] == 'true':
+                data += 4
+        elif key.endswith('rail'):
+            shape = palette_entry['Properties']['shape']
+            print('shape:', shape)
+            data = {'north_south':0, 'east_west': 1, 'ascending_east': 2, 'ascending_west': 3, 'ascending_north': 4, 'ascending_south': 5, 'south_west': 6, 'south_east': 7, 'north_east': 8, 'north_west': 9}[shape]
+            if key == 'minecraft:powered_rail' and palette_entry['Properties']['powered'] == 'true':
+                data += 8
+        elif key in ['minecraft:comparator', 'minecraft:repeater']:
+            if palette_entry['Properties']['powered'] == 'true':
+                block += 1
+            facing = palette_entry['Properties']['facing']
+            data = {'south': 0, 'west': 1, 'north': 2, 'east': 3}[facing]
+        elif key == 'minecraft:daylight_detector':
+            if palette_entry['Properties']['inverted'] == 'true':
+                block = 178
+        elif key == 'minecraft:redstone_wire':
+            data = palette_entry['Properties']['power']
         elif key == 'minecraft:grass_block':
             if palette_entry['Properties']['snowy']:
                 data = 0x10
@@ -731,17 +756,31 @@ class RegionSet(object):
                 data |= 0x08
         elif key == 'minecraft_wheat':
             data = int(palette_entry['Properties']['age'])
-        elif key == 'minecraft:wall_torch':
+        elif key in ['minecraft:stone_slab', 'minecraft:sandstone_slab', 'minecraft:oak_slab', 'minecraft:cobblestone_slab', 'minecraft:brick_slab', 'minecraft:stone_brick_slab', 'minecraft:nether_brick_slab', 'minecraft:quartz_slab']:
+            if palette_entry['Properties']['type'] == 'top':
+                data += 8
+        elif key in ['minecraft:ladder', 'minecraft:chest', 'minecraft:ender_chest', 'minecraft:trapped_chest', 'minecraft:furnace']:
             facing = palette_entry['Properties']['facing']
-            data = {'south': 1, 'north': 2, 'west': 3, 'east': 4}[facing]
+            data = {'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
+        elif key in ['minecraft:stone_button', 'minecraft:oak_button']:
+            facing = palette_entry['Properties']['facing']
+            data = {'east': 1, 'west': 2, 'south': 3, 'north': 4}[facing]
         elif key == 'minecraft:nether_wart':
             data = int(palette_entry['Properties']['age'])
+        elif key.endswith('shulker_box') or key.endswith('piston') or key in ['minecraft:observer', 'minecraft:dropper', 'minecraft:dispenser']:
+            facing = palette_entry['Properties']['facing']
+            data = {'down': 0, 'up': 1, 'north': 2, 'south': 3, 'west': 4, 'east': 5}[facing]
         elif key.endswith('_log'):
             axis = palette_entry['Properties']['axis']
             if axis == 'x':
                 data |= 4
             elif axis == 'z':
                 data |= 8
+        elif key in ['minecraft:redstone_torch','minecraft:redstone_wall_torch', 'minecraft:wall_torch']:
+            if palette_entry['Properties']['lit'] == 'true':
+                block += 1
+            facing = palette_entry['Properties'].get('facing', 'up')
+            data = {'east': 1, 'west': 2, 'south': 3, 'north': 4, 'up': 5}[facing]
         elif key == 'minecraft:vine':
             p = palette_entry['Properties']
             if p['south'] == 'true': data |= 1
@@ -1094,14 +1133,14 @@ class RegionSet(object):
         for k in unrecognized_block_types:
             logging.debug("Found %d blocks of unknown type %s" % (unrecognized_block_types[k], k))
 
-        return chunk_data      
-    
+        return chunk_data
+
 
     def iterate_chunks(self):
         """Returns an iterator over all chunk metadata in this world. Iterates
         over tuples of integers (x,z,mtime) for each chunk.  Other chunk data
         is not returned here.
-        
+
         """
 
         for (regionx, regiony), (regionfile, filemtime) in self.regionfiles.iteritems():
@@ -1117,7 +1156,7 @@ class RegionSet(object):
         """Returns an iterator over all chunk metadata in this world. Iterates
         over tuples of integers (x,z,mtime) for each chunk.  Other chunk data
         is not returned here.
-        
+
         """
 
         for (regionx, regiony), (regionfile, filemtime) in self.regionfiles.iteritems():
@@ -1138,7 +1177,7 @@ class RegionSet(object):
         """Returns a chunk's mtime, or False if the chunk does not exist.  This
         is therefore a dual purpose method. It corrects for the given north
         direction as described in the docs for get_chunk()
-        
+
         """
 
         regionfile = self._get_region_path(x,z)
@@ -1161,9 +1200,9 @@ class RegionSet(object):
         """
         (regionfile,filemtime) = self.regionfiles.get((chunkX//32, chunkY//32),(None, None))
         return regionfile
-            
+
     def _iterate_regionfiles(self):
-        """Returns an iterator of all of the region files, along with their 
+        """Returns an iterator of all of the region files, along with their
         coordinates
 
         Returns (regionx, regiony, filename)"""
@@ -1207,7 +1246,7 @@ class RegionSetWrapper(object):
         return self._r.iterate_newer_chunks(filemtime)
     def get_chunk_mtime(self, x, z):
         return self._r.get_chunk_mtime(x,z)
-    
+
 # see RegionSet.rotate.  These values are chosen so that they can be
 # passed directly to rot90; this means that they're the number of
 # times to rotate by 90 degrees CCW
@@ -1220,13 +1259,13 @@ class RotatedRegionSet(RegionSetWrapper):
     """A regionset, only rotated such that north points in the given direction
 
     """
-    
+
     # some class-level rotation constants
     _NO_ROTATION =               lambda x,z: (x,z)
     _ROTATE_CLOCKWISE =          lambda x,z: (-z,x)
     _ROTATE_COUNTERCLOCKWISE =   lambda x,z: (z,-x)
     _ROTATE_180 =                lambda x,z: (-x,-z)
-    
+
     # These take rotated coords and translate into un-rotated coords
     _unrotation_funcs = [
         _NO_ROTATION,
@@ -1234,7 +1273,7 @@ class RotatedRegionSet(RegionSetWrapper):
         _ROTATE_180,
         _ROTATE_CLOCKWISE,
     ]
-    
+
     # These translate un-rotated coordinates into rotated coordinates
     _rotation_funcs = [
         _NO_ROTATION,
@@ -1242,7 +1281,7 @@ class RotatedRegionSet(RegionSetWrapper):
         _ROTATE_180,
         _ROTATE_COUNTERCLOCKWISE,
     ]
-    
+
     def __init__(self, rsetobj, north_dir):
         self.north_dir = north_dir
         self.unrotate = self._unrotation_funcs[north_dir]
@@ -1250,14 +1289,14 @@ class RotatedRegionSet(RegionSetWrapper):
 
         super(RotatedRegionSet, self).__init__(rsetobj)
 
-    
+
     # Re-initialize upon unpickling. This is needed because we store a couple
     # lambda functions as instance variables
     def __getstate__(self):
         return (self._r, self.north_dir)
     def __setstate__(self, args):
         self.__init__(args[0], args[1])
-    
+
     def get_chunk(self, x, z):
         x,z = self.unrotate(x,z)
         chunk_data = dict(super(RotatedRegionSet, self).get_chunk(x,z))
@@ -1275,7 +1314,7 @@ class RotatedRegionSet(RegionSetWrapper):
                 array = numpy.swapaxes(array, 0,2)
                 section[arrayname] = array
         chunk_data['Sections'] = newsections
-        
+
         # same as above, for biomes (Z/X indexed)
         biomes = numpy.swapaxes(chunk_data['Biomes'], 0, 1)
         biomes = numpy.rot90(biomes, self.north_dir)
@@ -1388,7 +1427,7 @@ class CachedRegionSet(RegionSetWrapper):
             cache[key] = retval
 
         return retval
-        
+
 
 def get_save_dir():
     """Returns the path to the local saves directory
@@ -1397,7 +1436,7 @@ def get_save_dir():
       * at $HOME/.minecraft/saves/
 
     """
-    
+
     savepaths = []
     if "APPDATA" in os.environ:
         savepaths += [os.path.join(os.environ['APPDATA'], ".minecraft", "saves")]
@@ -1433,7 +1472,7 @@ def get_worlds():
                         'Time': 0,
                         'IsCorrupt': True}
 
-    
+
     for dir in os.listdir("."):
         world_dat = os.path.join(dir, "level.dat")
         if not os.path.exists(world_dat): continue
