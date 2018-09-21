@@ -582,12 +582,12 @@ class TileSet(object):
         # don't update last render time if we're leaving this alone
         last_rendertime = self.last_rendertime
         if self.options['renderchecks'] != 3:
-            last_rendertime = self.max_chunk_mtime        
-        
+            last_rendertime = self.max_chunk_mtime
+
         d = dict(name = self.options.get('title'),
                 zoomLevels = self.treedepth,
                 maxZoom = maxZoom,
-                defaultZoom = round(maxZoom / 1.8),
+                defaultZoom = self.options.get('defaultzoom', round(maxZoom / 1.8)),
                 center = self.options.get('center', False),
                 path = self.options.get('name'),
                 base = self.options.get('base'),

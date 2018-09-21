@@ -265,9 +265,9 @@ def validateManualPOIs(d):
     return d
 
 def validateCenter(c):
-    if c.length == 2:
+    if len(c) == 2:
         return [int(c[0]), 64, int(c[1])]
-    if c.length == 3:
+    if len(c) == 3:
         return [int(c[0]), int(c[1]), int(c[2])]
     else:
         raise ValidationException("Center point must have x/y/z or x/z coordinates")
