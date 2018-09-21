@@ -37,6 +37,8 @@ class TextureException(Exception):
 color_map = ["white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray",
              "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"]
 
+coral_map = ["brain", "bubble", "fire", "horn", "tube"]
+
 ##
 ## Textures object
 ##
@@ -4728,17 +4730,14 @@ def glazed_terracotta(self, blockid, data):
         elif glazed_terracotta_orientation == 3: # east / Player was facing west
             return self.build_full_block(texture.rotate(180), None, None, texture.rotate(180), texture.rotate(180))
 
-#Brain Coral Block
-block(blockid="brain_coral_block", top_image="assets/minecraft/textures/block/brain_coral_block.png")
+# Coral Block
+@material(blockid=1300, data=range(5), solid=True)
+def coral_block(self, blockid, data):
+texture = self.load_image_texture("assets/minecraft/textures/block/%s_coral_block.png" % coral_map[data])
+return self.build_block(texture, texture)
 
-#Bubble Coral Block
-block(blockid="bubble_coral_block", top_image="assets/minecraft/textures/block/bubble_coral_block.png")
-
-#Fire Coral Block
-block(blockid="fire_coral_block", top_image="assets/minecraft/textures/block/fire_coral_block.png")
-
-#Horn Coral Block
-block(blockid="horn_coral_block", top_image="assets/minecraft/textures/block/horn_coral_block.png")
-
-#Tube Coral Block
-block(blockid="tube_coral_block", top_image="assets/minecraft/textures/block/tube_coral_block.png")
+# Dead Coral Block
+@material(blockid=1304, data=range(5), solid=True)
+def dead_coral_block(self, blockid, data):
+texture = self.load_image_texture("assets/minecraft/textures/block/dead_%s_coral_block.png" % coral_map[data])
+return self.build_block(texture, texture)

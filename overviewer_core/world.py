@@ -669,40 +669,21 @@ class RegionSet(object):
 
             'minecraft:armor_stand': (416, 0), #not rendering
 
-            # The following blocks are underwater and are not yet rendered.
+            # The following blocks are not yet rendered.
             # To avoid spurious warnings, we'll treat them as water for now.
-            'minecraft:brain_coral': (8, 0),
-            'minecraft:brain_coral_block': ('brain_coral_block', 0),
-            'minecraft:brain_coral_fan': (8, 0),
-            'minecraft:brain_coral_wall_fan': (8, 0),
             'minecraft:bubble_column': (8, 0),
-            'minecraft:bubble_coral': (8, 0),
-            'minecraft:bubble_coral_block': ('bubble_coral_block', 0),
-            'minecraft:bubble_coral_fan': (8, 0),
-            'minecraft:bubble_coral_wall_fan': (8, 0),
-            'minecraft:fire_coral': (8, 0),
-            'minecraft:fire_coral_block': ('fire_coral_block', 0),
-            'minecraft:fire_coral_fan': (8, 0),
-            'minecraft:fire_coral_wall_fan': (8, 0),
-            'minecraft:horn_coral': (8, 0),
-            'minecraft:horn_coral_block': ('horn_coral_block', 0),
-            'minecraft:horn_coral_fan': (8, 0),
-            'minecraft:horn_coral_wall_fan': (8, 0),
             'minecraft:kelp': (8, 0),
             'minecraft:kelp_plant': (8, 0),
             'minecraft:sea_pickle': (8, 0),
             'minecraft:seagrass': (8, 0),
             'minecraft:tall_seagrass': (8, 0),
-            'minecraft:tube_coral': (8, 0),
-            'minecraft:tube_coral_block': ('tube_coral_block', 0),
-            'minecraft:tube_coral_fan': (8, 0),
-            'minecraft:tube_coral_wall_fan': (8, 0),
         }
 
         colors = [   'white', 'orange', 'magenta', 'light_blue',
                     'yellow',   'lime',    'pink',       'gray',
                 'light_gray',   'cyan',  'purple',       'blue',
                      'brown',  'green',     'red',      'black']
+
         for i in range(len(colors)):
             self._blockmap['minecraft:%s_stained_glass'      % colors[i]] = (95, i)
             self._blockmap['minecraft:%s_stained_glass_pane' % colors[i]] = (160, i)
@@ -710,6 +691,18 @@ class RegionSet(object):
             self._blockmap['minecraft:%s_wall_banner'        % colors[i]] = (177, i) #not rendering
             self._blockmap['minecraft:%s_concrete'           % colors[i]] = (251, i)
             self._blockmap['minecraft:%s_concrete_powder'    % colors[i]] = (252, i)
+
+        corals = ["brain", "bubble", "fire", "horn", "tube"]
+
+        for i in range(len(corals)):
+            self._blockmap['minecraft:%s_coral_block'         % corals[i]] = (1300, i)
+            self._blockmap['minecraft:%s_coral'               % corals[i]] = (8, 0) #water - TODO
+            self._blockmap['minecraft:%s_coral_fan'           % corals[i]] = (8, 0) #water - TODO
+            self._blockmap['minecraft:%s_coral_wall_fan'      % corals[i]] = (8, 0) #water - TODO
+            self._blockmap['minecraft:dead_%s_coral_block'    % corals[i]] = (1304, i)
+            self._blockmap['minecraft:dead_%s_coral'          % corals[i]] = (8, 0) #water - TODO
+            self._blockmap['minecraft:dead_%s_coral_fan'      % corals[i]] = (8, 0) #water - TODO
+            self._blockmap['minecraft:dead_%s_coral_wall_fan' % corals[i]] = (8, 0) #water - TODO
 
 
     # Re-initialize upon unpickling
