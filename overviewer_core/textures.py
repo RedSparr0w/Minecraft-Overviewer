@@ -4727,4 +4727,18 @@ def glazed_terracotta(self, blockid, data):
             return self.build_full_block(texture.rotate(270), None, None, texture.rotate(90), texture.rotate(270))
         elif glazed_terracotta_orientation == 3: # east / Player was facing west
             return self.build_full_block(texture.rotate(180), None, None, texture.rotate(180), texture.rotate(180))
-    
+
+#Brain Coral Block
+block(blockid=1301, top_image="assets/minecraft/textures/block/brain_coral_block.png")
+
+#Bubble Coral Block
+block(blockid=1302, top_image="assets/minecraft/textures/block/bubble_coral_block.png")
+
+#Fire Coral Block
+block(blockid=1303, top_image="assets/minecraft/textures/block/fire_coral_block.png")
+
+#Horn Coral Block
+block(blockid=1304, top_image="assets/minecraft/textures/block/horn_coral_block.png")
+
+#Tube Coral Block
+block(blockid=1305, top_image="assets/minecraft/textures/block/tube_coral_block.png")
