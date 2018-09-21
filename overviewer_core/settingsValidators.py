@@ -244,7 +244,7 @@ def validateDefaultZoom(z):
     if z > 0:
         return int(z)
     else:
-        return False
+        raise ValidationException("The default zoom is set below 1")
 
 def validateWebAssetsPath(p):
     try:
