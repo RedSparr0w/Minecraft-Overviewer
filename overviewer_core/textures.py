@@ -4733,11 +4733,11 @@ def glazed_terracotta(self, blockid, data):
 # Coral Block
 @material(blockid=1300, data=range(5), solid=True)
 def coral_block(self, blockid, data):
-texture = self.load_image_texture("assets/minecraft/textures/block/%s_coral_block.png" % coral_map[data])
-return self.build_block(texture, texture)
+    texture = self.load_image_texture("assets/minecraft/textures/block/%s_coral_block.png" % coral_map[data])
+    return self.build_block(texture, texture)
 
 # Dead Coral Block
 @material(blockid=1304, data=range(5), solid=True)
 def dead_coral_block(self, blockid, data):
-texture = self.load_image_texture("assets/minecraft/textures/block/dead_%s_coral_block.png" % coral_map[data])
-return self.build_block(texture, texture)
+    texture = self.load_image_texture("assets/minecraft/textures/block/dead_%s_coral_block.png" % coral_map[data])
+    return self.build_block(texture, texture)
